@@ -188,7 +188,7 @@ import sqlite3
 import telebot
 from telebot import types
 import configparser
-import json
+import time
 
 # Чтение конфига
 config = configparser.ConfigParser()  # создаём объекта парсера
@@ -333,6 +333,12 @@ with sqlite3.connect('data.db') as con:
     con.commit()
 
 
-
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except:
+        pass
+    else:
+        time.sleep(1)
 bot.polling(none_stop=True)
 print(getListIds())
