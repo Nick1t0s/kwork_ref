@@ -2,7 +2,7 @@ import multiprocessing
 
 
 def usersExists(id):
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"""
         SELECT EXISTS(SELECT * FROM Users where id = {id});""")
@@ -10,13 +10,13 @@ def usersExists(id):
         return bool(res[0])
 
 def AddReward(id, reward):
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"""
         UPDATE Users SET invited = invited + {reward} WHERE id = {id};""")
 
 def getRegBy(id):
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"""
         SELECT reg_by FROM Users WHERE id = {id};""")
@@ -34,7 +34,7 @@ def regUser(msg, reg_by):
     language_code = msg.from_user.language_code
 
     # Записываем человека
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"""
         INSERT INTO Users (id, reg_by, first_name, username, last_name, language_code)
@@ -50,14 +50,14 @@ def regUser(msg, reg_by):
             break
 
 def getUserData(id):
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"SELECT * FROM Users WHERE id = {id};")
         res = cur.fetchone()
     return res
 
 def getUserDataName(username):
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"SELECT * FROM Users WHERE username = '{username.strip('@')}';")
         res = cur.fetchone()
@@ -108,7 +108,7 @@ def getTrip(msg):
         with open("trip.jpg", "rb") as img:
             bot.send_photo(msg.chat.id, img)
 
-        with sqlite3.connect('data.db') as con:
+        with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
             cur = con.cursor()
             cur.execute(f"""
             UPDATE Users SET tripvaers = 1 WHERE id = {msg.chat.id};""")
@@ -119,7 +119,7 @@ def getTrip(msg):
         bot.send_message(msg.chat.id, "У вас не хватает приглашений")
 
 def getDataAdmin():
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"SELECT username FROM Users ORDER BY invited DESC LIMIT 3;")
         res1 = cur.fetchall()
@@ -170,7 +170,7 @@ def sendDataAboutUser(msg, data):
     bot.register_next_step_handler(msg, nextStepFindInf, int(data[0]))
 
 def getListIds():
-    with sqlite3.connect('data.db') as con:
+    with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
         cur = con.cursor()
         cur.execute(f"SELECT id FROM Users;")
         res = cur.fetchall()
@@ -183,7 +183,7 @@ import time
 
 # Чтение конфига
 config = configparser.ConfigParser()  # создаём объекта парсера
-config.read('config.ini')
+config.read('/root/refBot/kwork_rek/config.ini')
 TOKEN = config['Telegram']['token']
 admin = int(config['Telegram']['adminID'])
 
@@ -252,7 +252,7 @@ def nextStepFindInf(msg, id):
         with open("trip.jpg", "rb") as img:
             bot.send_photo(msg.chat.id, img)
 
-        with sqlite3.connect('data.db') as con:
+        with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
             cur = con.cursor()
             cur.execute(f"""
             UPDATE Users SET tripvaers = 1 WHERE id = {msg.chat.id};""")
@@ -305,7 +305,7 @@ def checkCallBack(call):
             bot.send_photo(call.message.chat.id, img)
         with open("payments.txt", encoding="UTF-8") as f:
             bot.send_message(call.message.chat.id, f.read())
-with sqlite3.connect('data.db') as con:
+with sqlite3.connect('/root/refBot/kwork_rek/data.db') as con:
     cur = con.cursor()
     cur.execute("""
     CREATE TABLE IF NOT EXISTS Users (
