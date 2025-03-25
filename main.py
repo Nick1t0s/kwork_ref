@@ -63,8 +63,8 @@ def getUserData(id):
 def getUserDataName(username):
     with sqlite3.connect('data.db') as con:
         cur = con.cursor()
-        print(f"SELECT * FROM Users WHERE username = '{username.strip("@")}';")
-        cur.execute(f"SELECT * FROM Users WHERE username = '{username.strip("@")}';")
+        print(f"SELECT * FROM Users WHERE username = '{username.strip('@')}';")
+        cur.execute(f"SELECT * FROM Users WHERE username = '{username.strip('@')}';")
         res = cur.fetchone()
     return res
 
@@ -165,7 +165,7 @@ def sendDataAboutUser(msg, data):
     text += f"Id: {data[0]}\n"
     text += f"Приглашен: {data[1]}\n"
     text += f"Кол-во приглашений: {data[2]}\n"
-    text += f"Трипваер: {["❌", "✅"][int(bool(data[3]))]}\n"
+    text += f"Трипваер: {['❌', '✅'][int(bool(data[3]))]}\n"
     text += f"Имя: {data[4]}\n"
     text += f"Никнейм: {data[5]}\n"
     text += f"Фамилия: {data[6]}\n"
@@ -340,5 +340,3 @@ while True:
         pass
     else:
         time.sleep(1)
-bot.polling(none_stop=True)
-print(getListIds())
