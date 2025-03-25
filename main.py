@@ -1,3 +1,6 @@
+import multiprocessing
+
+
 def usersExists(id):
     with sqlite3.connect('data.db') as con:
         cur = con.cursor()
@@ -332,11 +335,14 @@ with sqlite3.connect('data.db') as con:
     """)
     con.commit()
 
+def start():
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except:
+            pass
+        else:
+            time.sleep(1)
 
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except:
-        pass
-    else:
-        time.sleep(1)
+
+start()
