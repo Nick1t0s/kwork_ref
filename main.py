@@ -28,7 +28,6 @@ def getRegBy(id):
 def regUser(msg, reg_by):
     # Получаем данные
     id = msg.from_user.id
-    print(id)
     first_name = msg.from_user.first_name
     username = msg.from_user.username
     last_name = msg.from_user.last_name
@@ -37,9 +36,6 @@ def regUser(msg, reg_by):
     # Записываем человека
     with sqlite3.connect('data.db') as con:
         cur = con.cursor()
-        print(f"""
-        INSERT INTO Users (id, reg_by, first_name, username, last_name, language_code)
-        VALUES ({id}, {reg_by}, {first_name}, {username}, {last_name}, {language_code});""")
         cur.execute(f"""
         INSERT INTO Users (id, reg_by, first_name, username, last_name, language_code)
         VALUES ({id}, '{reg_by}', '{first_name}', '{username}', '{last_name}', '{language_code}');""")
@@ -49,34 +45,29 @@ def regUser(msg, reg_by):
     for i in range(3):
         if usersExists(req_regBy):
             AddReward(req_regBy, reward)
-            print(f"Значение у пользователя {req_regBy}, увеличено на {reward}")
             req_regBy =  getRegBy(req_regBy)
         else:
-            print("Мы дошли до начала цепочки")
             break
 
 def getUserData(id):
     with sqlite3.connect('data.db') as con:
         cur = con.cursor()
         cur.execute(f"SELECT * FROM Users WHERE id = {id};")
-        print(f"SELECT * FROM Users WHERE id = {id};")
         res = cur.fetchone()
     return res
 
 def getUserDataName(username):
     with sqlite3.connect('data.db') as con:
         cur = con.cursor()
-        print(f"SELECT * FROM Users WHERE username = '{username.strip('@')}';")
         cur.execute(f"SELECT * FROM Users WHERE username = '{username.strip('@')}';")
         res = cur.fetchone()
     return res
 
 def sendMenu(msg):
     data = getUserData(msg.chat.id)
-    print(data)
     inv = data[2]
     trip = data[3]
-    ref_url = f"https://t.me/reftest57bot?start={msg.from_user.id}"
+    ref_url = f"https://t.me/agentrenrsales_bot?start={msg.from_user.id}"
 
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton(text = "Обновить", callback_data = "update"))
@@ -91,7 +82,6 @@ def sendMenu(msg):
 
 def updateMenu(msg):
     data = getUserData(msg.chat.id)
-    print(data)
     inv = data[2]
     trip = data[3]
     ref_url = f"https://t.me/reftest57bot?start={msg.chat.id}"
@@ -113,7 +103,6 @@ def updateMenu(msg):
 
 def getTrip(msg):
     data = getUserData(msg.chat.id)
-    print(data)
 
     if data[2] > 10 or data[3] == 1:
         with open("trip.jpg", "rb") as img:
@@ -128,7 +117,6 @@ def getTrip(msg):
         sendMenu(msg)
     else:
         bot.send_message(msg.chat.id, "У вас не хватает приглашений")
-    print(data)
 
 def getDataAdmin():
     with sqlite3.connect('data.db') as con:
@@ -204,7 +192,6 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start_message(msg):
-    print(type(msg.chat.id))
     if msg.chat.id == admin:
         sendAdminMenu(msg)
     else:
@@ -277,7 +264,6 @@ def nextStepFindInf(msg, id):
         sendAdminMenu(msg)
 
 def sendMessageToUser(msg, id):
-    print("dfsnjjnkl")
     try:
         bot.send_message(id, f"Сообщение от организатора{msg.text}")
     except:
@@ -296,7 +282,6 @@ def mailingGetText(msg):
     users = getListIds()
     for user in users:
         try:
-            print(user)
             bot.send_message(user, msg.text)
         except:
             bot.send_message(msg.chat.id, f"Не удалось отправить сообщение пользователю: {user}")
@@ -344,5 +329,5 @@ def start():
         else:
             time.sleep(1)
 
-
+# bot.delete_webhook()
 start()
