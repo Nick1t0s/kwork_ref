@@ -92,7 +92,7 @@ def updateMenu(msg):
     markup.add(types.InlineKeyboardButton(text = "Получить трипваер", callback_data = "getTR"))
 
     text = f"""
-    Кол-во приглашенных: {inv}
+    Кол-во приглашенных: {inv} из 10
     Трипваер: {["❌", "✅"][int(bool(trip))]}
     Реферальная ссылка: {ref_url}
     """
