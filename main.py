@@ -304,9 +304,9 @@ def checkCallBack(call):
     if call.data == "getTR":
         getTrip(call.message)
     if call.data == "buyTR":
-        with open("qr.jpg", "rb") as img:
+        with open(f"{dirPath}/qr.jpg", "rb") as img:
             bot.send_photo(call.message.chat.id, img)
-        with open("payments.txt", encoding="UTF-8") as f:
+        with open(f"{dirPath}/payments.txt", encoding="UTF-8") as f:
             bot.send_message(call.message.chat.id, f.read())
 with sqlite3.connect(f"{dirPath}/data.db") as con:
     cur = con.cursor()
